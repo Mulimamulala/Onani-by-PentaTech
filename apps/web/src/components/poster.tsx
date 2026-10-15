@@ -3,7 +3,8 @@ import Link from 'next/link'
 import type { Title } from '@onani/db'
 import { isMuxImage } from '@/lib/images'
 import { OnaniMark, PentagonField } from './brand'
-import { ChevronRightIcon } from './icons'
+import { ChevronRightIcon, PlayIcon } from './icons'
+import { RailScroller } from './rail-scroller'
 
 export type PosterTitle = Pick<Title, 'slug' | 'name' | 'poster_url' | 'release_year' | 'is_free' | 'kind'> & {
   frame_url?: string | null
@@ -60,6 +61,14 @@ export function PosterCard({
         ) : (
           <PlaceholderArt title={title} />
         )}
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 hidden place-items-center bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:grid"
+        >
+          <span className="grid size-12 scale-90 place-items-center rounded-full bg-white text-black shadow-xl transition-transform duration-300 group-hover:scale-100">
+            <PlayIcon className="size-5" />
+          </span>
+        </span>
         {title.is_free && (
           <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-black backdrop-blur">
             Free
@@ -85,13 +94,13 @@ export function Rail({ heading, titles, href }: { heading: string; titles: Poste
           </Link>
         )}
       </div>
-      <ul className="no-scrollbar flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-3 md:scroll-px-10 md:gap-4 md:px-10">
+      <RailScroller>
         {titles.map((t) => (
           <li key={t.slug} className="w-[132px] shrink-0 snap-start sm:w-[168px] lg:w-[200px]">
             <PosterCard title={t} />
           </li>
         ))}
-      </ul>
+      </RailScroller>
     </section>
   )
 }

@@ -1,39 +1,25 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { getCurrentUser } from '@/lib/auth'
+import { AccountMenu } from './account-menu'
 import { OnaniLogo } from './brand'
 import { HeaderShell } from './header-shell'
-import { SearchIcon } from './icons'
-
-const NAV = [
-  { href: '/', label: 'Home' },
-  { href: '/browse?type=movie', label: 'Films' },
-  { href: '/browse?type=series', label: 'Series' },
-  { href: '/browse?free=1', label: 'Free' },
-  { href: '/plans', label: 'Plans' },
-]
+import { NavPills, NavPillsFallback } from './nav-pills'
+import { SearchButton } from './search-button'
 
 export function SiteHeader() {
   return (
     <HeaderShell>
-      <div className="mx-auto flex h-16 max-w-[1600px] items-center gap-8 px-4 md:px-10">
+      <div className="grid h-14 grid-cols-[1fr_auto] items-center gap-4 px-3 md:h-16 md:grid-cols-[1fr_auto_1fr] md:px-4">
         <OnaniLogo />
-        <nav aria-label="Main" className="hidden gap-6 text-sm font-semibold text-ink-2 md:flex">
-          {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className="transition-colors hover:text-ink">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="ml-auto flex items-center gap-2 sm:gap-3">
-          <Link
-            href="/browse"
-            aria-label="Browse and search"
-            className="grid size-10 place-items-center rounded-full text-ink-2 transition-colors hover:bg-surface-2/60 hover:text-ink"
-          >
-            <SearchIcon />
-          </Link>
-          <Suspense fallback={<div className="size-9" />}>
+        <div className="hidden md:block">
+          <Suspense fallback={<NavPillsFallback />}>
+            <NavPills />
+          </Suspense>
+        </div>
+        <div className="flex items-center justify-end gap-1.5 sm:gap-2">
+          <SearchButton />
+          <Suspense fallback={<div className="size-10" />}>
             <UserMenu />
           </Suspense>
         </div>
@@ -49,31 +35,12 @@ async function UserMenu() {
     return (
       <Link
         href="/login"
-        className="rounded-full bg-ink px-4 py-2 text-sm font-bold text-bg transition hover:opacity-85"
+        className="rounded-full bg-ink px-4 py-2 text-[13px] font-bold text-bg transition hover:opacity-85 active:scale-[0.98]"
       >
         Sign in
       </Link>
     )
   }
 
-  const initial = (user.email ?? '?').charAt(0).toUpperCase()
-  return (
-    <div className="flex items-center gap-3">
-      {user.isAdmin && (
-        <Link
-          href="/admin"
-          className="hidden rounded-full border border-hairline px-3 py-1.5 text-xs font-semibold text-ink-2 transition-colors hover:bg-surface sm:inline-block"
-        >
-          Admin
-        </Link>
-      )}
-      <Link
-        href="/account"
-        aria-label="Your account"
-        className="grid size-9 place-items-center rounded-full bg-surface-2 text-sm font-bold ring-1 ring-hairline transition hover:ring-ink"
-      >
-        {initial}
-      </Link>
-    </div>
-  )
+  return <AccountMenu email={user.email} isAdmin={user.isAdmin} />
 }

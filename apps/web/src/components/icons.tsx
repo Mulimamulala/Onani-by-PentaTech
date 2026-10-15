@@ -83,3 +83,30 @@ export const LockIcon = (p: IconProps) => (
     <path d="M8 10V7a4 4 0 0 1 8 0v3" />
   </Icon>
 )
+export const VolumeOffIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M11 5 6 9H3v6h3l5 4z" />
+    <path d="m22 9-6 6M16 9l6 6" />
+  </Icon>
+)
+export const VolumeOnIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M11 5 6 9H3v6h3l5 4z" />
+    <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" />
+  </Icon>
+)
+export const ChevronDownIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="m6 9 6 6 6-6" />
+  </Icon>
+)
+export const LogOutIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H3" />
+  </Icon>
+)
+export const ShieldIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" />
+  </Icon>
+)

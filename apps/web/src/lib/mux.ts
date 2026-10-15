@@ -15,7 +15,8 @@ export type PlaybackTokens = {
 export async function signPlayback(playbackId: string): Promise<PlaybackTokens> {
   const tokens = await mux.jwt.signPlaybackId(playbackId, {
     type: ['video', 'thumbnail', 'storyboard'],
-    expiration: '6h',
+    // Long enough for a feature film; short enough that a shared link soon dies.
+    expiration: '4h',
   })
   return {
     playback: tokens['playback-token']!,
@@ -36,6 +37,24 @@ export async function signedThumbnailUrl(
   if (opts.time != null) params.time = String(Math.max(0, Math.floor(opts.time)))
   const token = await mux.jwt.signPlaybackId(playbackId, { type: 'thumbnail', expiration: '2d', params })
   return `https://image.mux.com/${playbackId}/thumbnail.webp?token=${token}`
+}
+
+export type PreviewClip = { playbackId: string; token: string }
+
+/**
+ * A muted teaser for heroes. The clip range is sealed inside the token, so
+ * this token can be public: it cannot stream anything outside those seconds.
+ */
+export async function signPreview(playbackId: string, durationSeconds: number | null, length = 15): Promise<PreviewClip> {
+  const duration = durationSeconds ?? length
+  const start = Math.max(0, Math.min(frameTime(duration), duration - length))
+  const end = Math.min(duration, start + length)
+  const token = await mux.jwt.signPlaybackId(playbackId, {
+    type: 'video',
+    expiration: '3d',
+    params: { asset_start_time: String(Math.floor(start)), asset_end_time: String(Math.ceil(end)) },
+  })
+  return { playbackId, token }
 }
 
 /** A representative frame: a fifth of the way in, capped at one minute. */

@@ -13,6 +13,7 @@
     "@mux/mux-node": "^15.5.0",
     "@mux/mux-player-react": "^3.14.0",
     "@mux/mux-uploader-react": "^1.6.0",
+    "@mux/mux-video-react": "^0.31.5",
     "@onani/core": "*",
     "@onani/db": "*",
     "@supabase/ssr": "^0.12.7",

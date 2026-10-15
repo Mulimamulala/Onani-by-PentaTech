@@ -1,17 +1,28 @@
 'use client'
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 /**
- * Over a dark hero the header is transparent with light text; once the page
- * scrolls (or on pages without a hero) it becomes a solid, theme-aware bar.
+ * A floating glass bar. Over a dark hero it is transparent with light text;
+ * once the page scrolls (or on pages without a hero) it turns solid and
+ * theme-aware. It tucks away while scrolling down and returns on scroll up.
  */
 export function HeaderShell({ children }: { children: ReactNode }) {
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [overHero, setOverHero] = useState(true)
+  const lastY = useRef(0)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 24)
+      // Ignore tiny jitters; never hide near the top.
+      if (Math.abs(y - lastY.current) > 6) {
+        setHidden(y > lastY.current && y > 320)
+        lastY.current = y
+      }
+    }
     const checkHero = () => setOverHero(Boolean(document.querySelector('[data-hero]')))
     onScroll()
     checkHero()
@@ -29,14 +40,20 @@ export function HeaderShell({ children }: { children: ReactNode }) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ease-out-soft ${
-        transparent
-          ? 'theme-dark bg-gradient-to-b from-black/70 to-transparent'
-          : 'border-b border-hairline-soft bg-bg/85 backdrop-blur-xl'
-      }`}
-      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      className={`fixed inset-x-0 top-0 z-40 px-2 pt-2 transition-transform duration-500 ease-out-soft md:px-4 md:pt-3 ${
+        hidden ? '-translate-y-[120%]' : 'translate-y-0'
+      } ${transparent ? 'theme-dark' : ''}`}
+      style={{ paddingTop: 'max(env(safe-area-inset-top), 0.5rem)' }}
     >
-      {children}
+      <div
+        className={`mx-auto max-w-[1600px] rounded-[20px] transition-[background-color,box-shadow,border-color] duration-500 ease-out-soft ${
+          transparent
+            ? 'border border-transparent bg-transparent'
+            : 'border border-hairline-soft bg-bg/75 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-2xl backdrop-saturate-150'
+        }`}
+      >
+        {children}
+      </div>
     </header>
   )
 }

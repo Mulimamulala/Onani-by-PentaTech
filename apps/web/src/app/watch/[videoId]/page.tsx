@@ -81,6 +81,7 @@ async function Watch({ params }: { params: PageProps<'/watch/[videoId]'>['params
         startTime={startTime}
         title={label}
         viewerUserId={user.id}
+        watermark={`${user.email ?? user.id.slice(0, 8)} · Onani`}
       />
       <div className="mx-auto max-w-[1600px] px-4 py-5 md:px-10">
         <Link

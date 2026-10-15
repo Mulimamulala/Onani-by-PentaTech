@@ -8,6 +8,7 @@ import { OnaniMark, PentagonField } from '@/components/brand'
 import { HERO_SHELL, primaryButton } from '@/components/hero'
 import { PlayIcon } from '@/components/icons'
 import { Rail } from '@/components/poster'
+import { TitlePreview } from '@/components/title-preview'
 import { getAllTitles, getTitleBySlug } from '@/lib/catalog'
 import { isMuxImage } from '@/lib/images'
 
@@ -70,13 +71,14 @@ async function TitleDetails({ params }: { params: PageProps<'/title/[slug]'>['pa
             fetchPriority="high"
             sizes="100vw"
             unoptimized={isMuxImage(image)}
-            className="-z-20 object-cover object-top"
+            className="-z-30 object-cover object-top"
           />
         ) : (
-          <div className="absolute inset-0 -z-20">
+          <div className="absolute inset-0 -z-30">
             <PentagonField className="absolute -right-[25%] -top-[5%] w-[120%] md:right-0 md:w-[60%]" />
           </div>
         )}
+        {title.preview && <TitlePreview preview={title.preview} />}
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/60 to-black/10" />
         <div className="absolute inset-0 -z-10 hidden bg-gradient-to-r from-black/85 via-black/30 to-transparent md:block" />
 

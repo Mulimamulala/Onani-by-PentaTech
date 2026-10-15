@@ -1,6 +1,6 @@
 import 'server-only'
 import { cacheLife, cacheTag } from 'next/cache'
-import { frameTime, signedThumbnailUrl } from '@/lib/mux'
+import { frameTime, signPreview, signedThumbnailUrl } from '@/lib/mux'
 import { createPublicClient } from '@/lib/supabase/server'
 
 // Public catalog reads. Cached on the server and refreshed via the 'catalog'
@@ -34,17 +34,50 @@ export async function getAllTitles() {
   if (error) throw error
 
   return Promise.all(
-    (data ?? []).map(async ({ videos, ...title }) => ({ ...title, frame_url: await frameFor(videos[0]) })),
+    (data ?? []).map(async ({ videos, ...title }) => ({
+      ...title,
+      frame_url: await frameFor(videos[0]),
+      // Kept for previews; a signed playback ID alone cannot stream anything.
+      first_video: videos[0]?.mux_playback_id ? videos[0] : null,
+    })),
   )
 }
 
+/** Up to five hero slides: featured titles first, then the newest with artwork, each with a sealed 15s teaser. */
+export async function getHeroSlides() {
+  'use cache'
+  cacheTag(CATALOG_TAG)
+  cacheLife('minutes')
+
+  const titles = await getAllTitles()
+  const ranked = [
+    ...titles.filter((t) => t.is_featured),
+    ...titles.filter((t) => !t.is_featured && (t.backdrop_url || t.frame_url || t.poster_url)),
+  ].slice(0, 5)
+
+  return Promise.all(
+    ranked.map(async ({ first_video, ...t }) => ({
+      slug: t.slug,
+      name: t.name,
+      synopsis: t.synopsis,
+      kind: t.kind,
+      release_year: t.release_year,
+      genres: t.genres,
+      is_free: t.is_free,
+      maturity_rating: t.maturity_rating,
+      image: t.backdrop_url ?? t.frame_url ?? t.poster_url,
+      preview: first_video?.mux_playback_id
+        ? await signPreview(first_video.mux_playback_id, first_video.duration_seconds)
+        : null,
+    })),
+  )
+}
+
+export type HeroSlide = Awaited<ReturnType<typeof getHeroSlides>>[number]
+
 export async function getHomeCatalog() {
   const titles = await getAllTitles()
-  const featured = titles.filter((t) => t.is_featured)
-  const hero = featured[0] ?? titles[0] ?? null
-
   return {
-    hero,
     latest: titles.slice(0, 20),
     free: titles.filter((t) => t.is_free),
     films: titles.filter((t) => t.kind === 'movie'),
@@ -85,8 +118,10 @@ export async function getTitleBySlug(slug: string) {
       frame_url: await frameFor({ mux_playback_id, duration_seconds: v.duration_seconds }, 640),
     })),
   )
-  const frame_url = await frameFor(data.videos[0])
-  return { ...data, videos, frame_url }
+  const first = data.videos[0]
+  const frame_url = await frameFor(first)
+  const preview = first?.mux_playback_id ? await signPreview(first.mux_playback_id, first.duration_seconds) : null
+  return { ...data, videos, frame_url, preview }
 }
 
 export async function getActivePlans() {

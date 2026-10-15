@@ -69,6 +69,7 @@ async function Results({ searchParams }: { searchParams: PageProps<'/browse'>['s
           name="q"
           type="search"
           defaultValue={f.q}
+          autoFocus={raw.focus === '1'}
           placeholder="Search films and series"
           className="w-full rounded-full border border-hairline bg-surface px-5 py-3 text-[15px] outline-none transition placeholder:text-ink-muted focus:border-ink md:max-w-md"
         />

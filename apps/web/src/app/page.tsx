@@ -3,18 +3,20 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import { formatPrice, progressFraction } from '@onani/core'
 import { OnaniMark } from '@/components/brand'
-import { Hero, WelcomeHero } from '@/components/hero'
+import { WelcomeHero } from '@/components/hero'
+import { HeroCarousel } from '@/components/hero-carousel'
 import { CheckIcon, PlayIcon, TicketIcon } from '@/components/icons'
 import { Rail } from '@/components/poster'
 import { getCurrentUser } from '@/lib/auth'
-import { getActivePlans, getHomeCatalog } from '@/lib/catalog'
+import { getActivePlans, getHeroSlides, getHomeCatalog } from '@/lib/catalog'
 import { isMuxImage } from '@/lib/images'
 import { signedThumbnailUrl } from '@/lib/mux'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function HomePage() {
-  const [{ hero, latest, free, films, series, genres, total }, plans] = await Promise.all([
+  const [{ latest, free, films, series, genres, total }, slides, plans] = await Promise.all([
     getHomeCatalog(),
+    getHeroSlides(),
     getActivePlans(),
   ])
   const cheapest = plans[0]
@@ -22,7 +24,7 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-10 md:space-y-14">
-      {hero ? <Hero title={hero} /> : <WelcomeHero priceLabel={priceLabel} />}
+      {slides.length > 0 ? <HeroCarousel slides={slides} /> : <WelcomeHero priceLabel={priceLabel} />}
 
       <div className="space-y-10 md:space-y-12">
         <Suspense fallback={null}>
