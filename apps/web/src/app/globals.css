@@ -1,12 +1,47 @@
 @import "tailwindcss";
 
 /*
- * Onani tokens, adapted from the PentaTech IT design system (dark theme).
- * Gray does the work; PentaTech Gold marks the brand and the one primary action.
- * Gold is used as a fill with black text (9.6:1) or as text on black (9.6:1),
- * never as text on light grounds.
+ * Onani tokens, from the PentaTech IT design system (Light and Dark themes).
+ * Gray does the work. PentaTech Gold appears only in the Onani mark, focus rings
+ * and playback progress. Primary actions use the inverse pair (ink on bg).
  */
 :root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #f5f5f7;
+  --surface-2: #e8e8ed;
+  --hairline: #d2d2d7;
+  --hairline-soft: #e8e8ed;
+  --ink: #1d1d1f;
+  --ink-2: #424245;
+  --ink-muted: #6e6e73;
+  --gold: #daa520;
+  --gold-ink: #000000;
+  --scrim: rgba(0, 0, 0, 0.88);
+  --positive: #0e7a55;
+  --negative: #9a3412;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #000000;
+    --surface: #1d1d1f;
+    --surface-2: #2c2c2e;
+    --hairline: #424245;
+    --hairline-soft: #2c2c2e;
+    --ink: #f5f5f7;
+    --ink-2: #d2d2d7;
+    --ink-muted: #a1a1a6;
+    --positive: #4fd1a0;
+    --negative: #f08a55;
+  }
+}
+
+/* Forced dark, and dark "islands" (heroes, the player) that stay dark in Light mode. */
+:root[data-theme="dark"],
+.theme-dark {
+  color-scheme: dark;
   --bg: #000000;
   --surface: #1d1d1f;
   --surface-2: #2c2c2e;
@@ -15,14 +50,12 @@
   --ink: #f5f5f7;
   --ink-2: #d2d2d7;
   --ink-muted: #a1a1a6;
-  --gold: #daa520;
-  --gold-hover: #c89518;
-  --gold-ink: #000000;
-  --gold-subtle: rgba(218, 165, 32, 0.12);
-  --gold-border: rgba(218, 165, 32, 0.32);
-  --scrim: rgba(0, 0, 0, 0.88);
   --positive: #4fd1a0;
   --negative: #f08a55;
+}
+
+.theme-dark {
+  color: var(--ink);
 }
 
 @theme inline {
@@ -35,10 +68,7 @@
   --color-ink-2: var(--ink-2);
   --color-ink-muted: var(--ink-muted);
   --color-gold: var(--gold);
-  --color-gold-hover: var(--gold-hover);
   --color-gold-ink: var(--gold-ink);
-  --color-gold-subtle: var(--gold-subtle);
-  --color-gold-border: var(--gold-border);
   --color-positive: var(--positive);
   --color-negative: var(--negative);
 
@@ -46,22 +76,16 @@
   --color-background: var(--bg);
   --color-foreground: var(--ink);
   --color-muted: var(--ink-muted);
-  --color-accent: var(--gold);
-  --color-accent-foreground: var(--gold-ink);
+  --color-accent: var(--ink);
+  --color-accent-foreground: var(--bg);
   --color-border: var(--hairline);
 
   --font-sans: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
-
-  --radius-sm: 14px;
-  --radius-md: 18px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
 
   --ease-out-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 html {
-  color-scheme: dark;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -71,8 +95,8 @@ body {
 }
 
 ::selection {
-  background: var(--gold);
-  color: var(--gold-ink);
+  background: var(--ink);
+  color: var(--bg);
 }
 
 :focus-visible {

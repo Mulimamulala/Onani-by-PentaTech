@@ -12,8 +12,8 @@ export function LoginForm({ next, error }: { next: string; error?: string }) {
 
   if (state.status === 'sent') {
     return (
-      <div className="mt-6 rounded-[18px] bg-gold-subtle p-4 ring-1 ring-gold-border" role="status">
-        <p className="flex items-center gap-2 font-bold text-gold">
+      <div className="mt-6 rounded-[18px] bg-surface-2 p-4 ring-1 ring-hairline" role="status">
+        <p className="flex items-center gap-2 font-bold text-positive">
           <CheckIcon className="size-4" />
           Link sent
         </p>
@@ -34,11 +34,11 @@ export function LoginForm({ next, error }: { next: string; error?: string }) {
         autoComplete="email"
         inputMode="email"
         placeholder="you@example.com"
-        className="rounded-[14px] border border-hairline bg-bg px-4 py-3.5 text-base outline-none transition placeholder:text-ink-muted focus:border-gold"
+        className="rounded-[14px] border border-hairline bg-bg px-4 py-3.5 text-base outline-none transition placeholder:text-ink-muted focus:border-ink"
       />
       <button
         disabled={pending}
-        className="mt-1 rounded-full bg-gold px-4 py-3.5 font-bold text-gold-ink transition-colors hover:bg-gold-hover disabled:opacity-60"
+        className="mt-1 rounded-full bg-ink px-4 py-3.5 font-bold text-bg transition hover:opacity-85 disabled:opacity-60"
       >
         {pending ? 'Sending…' : 'Email me a sign-in link'}
       </button>

@@ -30,10 +30,11 @@ export function BottomNav() {
               <Link
                 href={href}
                 aria-current={active ? 'page' : undefined}
-                className={`flex h-full flex-col items-center justify-center gap-1 text-[11px] font-semibold transition-colors ${
-                  active ? 'text-gold' : 'text-ink-muted'
+                className={`relative flex h-full flex-col items-center justify-center gap-1 text-[11px] font-semibold transition-colors ${
+                  active ? 'text-ink' : 'text-ink-muted'
                 }`}
               >
+                {active && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-ink" />}
                 <Icon className="size-[22px]" />
                 {label}
               </Link>

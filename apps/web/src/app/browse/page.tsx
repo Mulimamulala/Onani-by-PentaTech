@@ -70,7 +70,7 @@ async function Results({ searchParams }: { searchParams: PageProps<'/browse'>['s
           type="search"
           defaultValue={f.q}
           placeholder="Search films and series"
-          className="w-full rounded-full border border-hairline bg-surface px-5 py-3 text-[15px] outline-none transition placeholder:text-ink-muted focus:border-gold md:max-w-md"
+          className="w-full rounded-full border border-hairline bg-surface px-5 py-3 text-[15px] outline-none transition placeholder:text-ink-muted focus:border-ink md:max-w-md"
         />
       </form>
 
@@ -81,7 +81,7 @@ async function Results({ searchParams }: { searchParams: PageProps<'/browse'>['s
             href={c.href}
             aria-current={c.active ? 'true' : undefined}
             className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-              c.active ? 'bg-gold text-gold-ink' : 'bg-surface text-ink-2 hover:bg-surface-2 hover:text-ink'
+              c.active ? 'bg-ink text-bg' : 'bg-surface text-ink-2 hover:bg-surface-2 hover:text-ink'
             }`}
           >
             {c.label}

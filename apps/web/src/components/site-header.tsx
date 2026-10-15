@@ -29,7 +29,7 @@ export function SiteHeader() {
           <Link
             href="/browse"
             aria-label="Browse and search"
-            className="grid size-10 place-items-center rounded-full text-ink-2 transition-colors hover:bg-white/10 hover:text-ink"
+            className="grid size-10 place-items-center rounded-full text-ink-2 transition-colors hover:bg-surface-2/60 hover:text-ink"
           >
             <SearchIcon />
           </Link>
@@ -49,7 +49,7 @@ async function UserMenu() {
     return (
       <Link
         href="/login"
-        className="rounded-full bg-gold px-4 py-2 text-sm font-bold text-gold-ink transition-colors hover:bg-gold-hover"
+        className="rounded-full bg-ink px-4 py-2 text-sm font-bold text-bg transition hover:opacity-85"
       >
         Sign in
       </Link>
@@ -62,7 +62,7 @@ async function UserMenu() {
       {user.isAdmin && (
         <Link
           href="/admin"
-          className="hidden rounded-full border border-gold-border px-3 py-1.5 text-xs font-semibold text-gold transition-colors hover:bg-gold-subtle sm:inline-block"
+          className="hidden rounded-full border border-hairline px-3 py-1.5 text-xs font-semibold text-ink-2 transition-colors hover:bg-surface sm:inline-block"
         >
           Admin
         </Link>
@@ -70,7 +70,7 @@ async function UserMenu() {
       <Link
         href="/account"
         aria-label="Your account"
-        className="grid size-9 place-items-center rounded-full bg-surface-2 text-sm font-bold ring-1 ring-hairline transition hover:ring-gold"
+        className="grid size-9 place-items-center rounded-full bg-surface-2 text-sm font-bold ring-1 ring-hairline transition hover:ring-ink"
       >
         {initial}
       </Link>

@@ -48,14 +48,14 @@ async function Watch({ params }: { params: PageProps<'/watch/[videoId]'>['params
   if (!allowed) {
     return (
       <div className="mx-auto flex min-h-[80svh] max-w-md flex-col items-center justify-center px-4 pt-16 text-center">
-        <span className="grid size-14 place-items-center rounded-full bg-gold-subtle text-gold ring-1 ring-gold-border">
+        <span className="grid size-14 place-items-center rounded-full bg-surface-2 text-ink-muted ring-1 ring-hairline">
           <LockIcon className="size-6" />
         </span>
         <h1 className="mt-5 text-3xl font-bold tracking-[-0.03em]">Subscribe to watch {video.title.name}.</h1>
         <p className="mt-2 text-ink-muted">One plan unlocks every film and series on Onani. Pay with mobile money or card.</p>
         <Link
           href="/plans"
-          className="mt-6 w-full rounded-full bg-gold px-6 py-4 font-bold text-gold-ink transition-colors hover:bg-gold-hover sm:w-auto"
+          className="mt-6 w-full rounded-full bg-ink px-6 py-4 font-bold text-bg transition hover:opacity-85 sm:w-auto"
         >
           See plans
         </Link>
@@ -73,7 +73,7 @@ async function Watch({ params }: { params: PageProps<'/watch/[videoId]'>['params
     .join(' · ')
 
   return (
-    <div className="bg-black pt-16">
+    <div data-hero className="theme-dark min-h-[70svh] bg-black pt-16">
       <Player
         videoId={video.id}
         playbackId={video.mux_playback_id}

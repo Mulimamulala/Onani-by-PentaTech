@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { OnaniLogo } from './brand'
+import { ThemeToggle } from './theme-toggle'
 
 export function SiteFooter() {
   return (
@@ -17,9 +17,25 @@ export function SiteFooter() {
           <Link href="/account" className="hover:text-ink">Account</Link>
           <Link href="/browse?free=1" className="hover:text-ink">Watch free</Link>
         </nav>
-        <div className="flex items-center gap-3 text-xs text-ink-muted">
-          A product of
-          <Image src="/brand/pentatech-white.png" alt="PentaTech" width={120} height={11} className="h-auto w-[120px] opacity-80" />
+        <div className="flex flex-col gap-4 md:items-end">
+          <ThemeToggle />
+          <div className="flex items-center gap-3 text-xs text-ink-muted">
+            A product of
+            {/* The wordmark PNG is used as a mask so it takes the text colour in both themes. */}
+            <span
+              role="img"
+              aria-label="PentaTech"
+              className="block h-[11px] w-[120px] bg-ink-muted"
+              style={{
+                maskImage: 'url(/brand/pentatech-white.png)',
+                WebkitMaskImage: 'url(/brand/pentatech-white.png)',
+                maskSize: 'contain',
+                WebkitMaskSize: 'contain',
+                maskRepeat: 'no-repeat',
+                WebkitMaskRepeat: 'no-repeat',
+              }}
+            />
+          </div>
         </div>
       </div>
     </footer>

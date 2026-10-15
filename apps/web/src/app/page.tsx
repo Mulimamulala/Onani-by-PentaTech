@@ -1,12 +1,15 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { formatPrice, progressFraction } from '@onani/core'
 import { OnaniMark } from '@/components/brand'
 import { Hero, WelcomeHero } from '@/components/hero'
-import { PlayIcon } from '@/components/icons'
+import { CheckIcon, PlayIcon, TicketIcon } from '@/components/icons'
 import { Rail } from '@/components/poster'
 import { getCurrentUser } from '@/lib/auth'
 import { getActivePlans, getHomeCatalog } from '@/lib/catalog'
+import { isMuxImage } from '@/lib/images'
+import { signedThumbnailUrl } from '@/lib/mux'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function HomePage() {
@@ -21,7 +24,7 @@ export default async function HomePage() {
     <div className="space-y-10 md:space-y-14">
       {hero ? <Hero title={hero} /> : <WelcomeHero priceLabel={priceLabel} />}
 
-      <div className="relative z-10 -mt-6 space-y-10 md:-mt-16 md:space-y-12">
+      <div className="space-y-10 md:space-y-12">
         <Suspense fallback={null}>
           <ContinueWatching />
         </Suspense>
@@ -52,9 +55,9 @@ async function SignedOutPitch({ priceLabel }: { priceLabel: string | null }) {
   if (user) return null
 
   const points = [
-    { title: 'Watch anywhere', body: 'Phone, laptop or TV. Picks up where you left off.' },
-    { title: 'Pay your way', body: 'Airtel Money, MTN MoMo, Zamtel Kwacha or card.' },
-    { title: priceLabel ? `From ${priceLabel}` : 'Flexible plans', body: 'Weekly or monthly. No contracts, cancel anytime.' },
+    { Icon: PlayIcon, title: 'Watch anywhere', body: 'Phone, laptop or TV. Picks up where you left off.' },
+    { Icon: TicketIcon, title: 'Pay your way', body: 'Airtel Money, MTN MoMo, Zamtel Kwacha or card.' },
+    { Icon: CheckIcon, title: priceLabel ? `From ${priceLabel}` : 'Flexible plans', body: 'Weekly or monthly. No contracts, cancel anytime.' },
   ]
 
   return (
@@ -62,7 +65,9 @@ async function SignedOutPitch({ priceLabel }: { priceLabel: string | null }) {
       <ul className="no-scrollbar mx-auto flex max-w-[1600px] snap-x gap-3 overflow-x-auto md:grid md:grid-cols-3 md:gap-4">
         {points.map((p) => (
           <li key={p.title} className="w-[78%] shrink-0 snap-start rounded-[18px] bg-surface p-5 md:w-auto">
-            <OnaniMark className="size-5" />
+            <span className="grid size-9 place-items-center rounded-full bg-surface-2 text-ink">
+              <p.Icon className="size-4" />
+            </span>
             <p className="mt-3 font-bold tracking-tight">{p.title}</p>
             <p className="mt-1 text-sm text-ink-muted">{p.body}</p>
           </li>
@@ -79,28 +84,40 @@ async function ContinueWatching() {
   const supabase = await createClient()
   const { data } = await supabase
     .from('watch_progress')
-    .select('position_seconds, video:videos (id, name, duration_seconds, title:titles (slug, name, backdrop_url))')
+    .select('position_seconds, video:videos (id, name, duration_seconds, mux_playback_id, title:titles (slug, name, backdrop_url))')
     .eq('user_id', user.id)
     .eq('completed', false)
     .order('updated_at', { ascending: false })
     .limit(12)
 
-  const items = (data ?? []).filter((row) => row.video?.title)
-  if (items.length === 0) return null
+  const rows = (data ?? []).filter((row) => row.video?.title)
+  if (rows.length === 0) return null
+
+  // Show the frame where the viewer stopped, not a generic poster.
+  const items = await Promise.all(
+    rows.map(async (row) => ({
+      ...row,
+      image: row.video!.mux_playback_id
+        ? await signedThumbnailUrl(row.video!.mux_playback_id, { width: 640, time: Number(row.position_seconds) })
+        : row.video!.title!.backdrop_url,
+    })),
+  )
 
   return (
     <section aria-label="Continue watching" className="space-y-3">
       <h2 className="px-4 text-lg font-bold tracking-[-0.02em] md:px-10 md:text-xl">Continue watching</h2>
       <ul className="no-scrollbar flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 md:scroll-px-10 md:gap-4 md:px-10">
-        {items.map(({ video, position_seconds }) => (
+        {items.map(({ video, position_seconds, image }) => (
           <li key={video!.id} className="w-[260px] shrink-0 snap-start md:w-[320px]">
             <Link href={`/watch/${video!.id}`} className="group block">
               <div
-                className="relative aspect-video overflow-hidden rounded-[14px] bg-surface bg-cover bg-center ring-1 ring-white/5 transition group-hover:ring-gold/60"
-                style={video!.title!.backdrop_url ? { backgroundImage: `url(${video!.title!.backdrop_url})` } : undefined}
+                className="theme-dark relative aspect-video overflow-hidden rounded-[14px] bg-surface shadow-sm ring-1 ring-black/5"
               >
+                {image && (
+                  <Image src={image} alt="" fill sizes="320px" unoptimized={isMuxImage(image)} className="object-cover transition duration-500 ease-out-soft md:group-hover:scale-[1.04]" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-                <span className="absolute left-1/2 top-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/50 ring-1 ring-white/40 backdrop-blur transition group-hover:bg-gold group-hover:text-gold-ink">
+                <span className="absolute left-1/2 top-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-white ring-1 ring-white/40 backdrop-blur transition group-hover:bg-white group-hover:text-black">
                   <PlayIcon className="size-5" />
                 </span>
                 <div className="absolute inset-x-3 bottom-3">

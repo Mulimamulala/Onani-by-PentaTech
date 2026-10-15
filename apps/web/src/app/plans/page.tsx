@@ -19,7 +19,7 @@ export default async function PlansPage() {
       <PentagonField className="absolute -right-[30%] -top-[10%] -z-10 w-[120%] opacity-60 md:-right-[10%] md:w-[55%]" />
 
       <div className="mx-auto max-w-5xl px-4 pt-24 md:px-10 md:pt-32">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">Plans</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-muted">Plans</p>
         <h1 className="mt-2 max-w-2xl text-[40px] font-bold leading-[1.02] tracking-[-0.04em] md:text-6xl">
           One plan. Everything on Onani.
         </h1>
@@ -33,11 +33,11 @@ export default async function PlansPage() {
               <li
                 key={plan.id}
                 className={`relative flex flex-col rounded-[24px] p-6 md:p-8 ${
-                  highlight ? 'bg-surface ring-2 ring-gold' : 'bg-surface ring-1 ring-hairline-soft'
+                  highlight ? 'bg-surface ring-2 ring-ink' : 'bg-surface ring-1 ring-hairline-soft'
                 }`}
               >
                 {highlight && (
-                  <span className="absolute right-5 top-5 rounded-full bg-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-gold-ink">
+                  <span className="absolute right-5 top-5 rounded-full bg-ink px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-bg">
                     Best value
                   </span>
                 )}
@@ -52,7 +52,7 @@ export default async function PlansPage() {
                 <ul className="mt-6 space-y-3 text-[15px] text-ink-2">
                   {BENEFITS.map((b) => (
                     <li key={b} className="flex items-center gap-3">
-                      <CheckIcon className="size-4 shrink-0 text-gold" />
+                      <CheckIcon className="size-4 shrink-0 text-ink-muted" />
                       {b}
                     </li>
                   ))}
@@ -62,7 +62,7 @@ export default async function PlansPage() {
                 <button
                   disabled
                   className={`mt-8 w-full rounded-full px-6 py-4 font-bold disabled:cursor-not-allowed ${
-                    highlight ? 'bg-gold text-gold-ink opacity-70' : 'bg-surface-2 text-ink opacity-70'
+                    highlight ? 'bg-ink text-bg opacity-70' : 'bg-surface-2 text-ink opacity-70'
                   }`}
                 >
                   Payments opening soon

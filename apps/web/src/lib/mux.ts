@@ -24,12 +24,22 @@ export async function signPlayback(playbackId: string): Promise<PlaybackTokens> 
   }
 }
 
-/** Poster image for a signed playback ID. */
-export async function signedThumbnailUrl(playbackId: string, width = 640): Promise<string> {
-  const token = await mux.jwt.signPlaybackId(playbackId, {
-    type: 'thumbnail',
-    expiration: '1d',
-    params: { width: String(width) },
-  })
+/**
+ * A still frame from a signed playback ID. With signed playback, the image
+ * params live inside the token, so the URL carries only `?token=`.
+ */
+export async function signedThumbnailUrl(
+  playbackId: string,
+  opts: { width?: number; time?: number } = {},
+): Promise<string> {
+  const params: Record<string, string> = { width: String(opts.width ?? 1280) }
+  if (opts.time != null) params.time = String(Math.max(0, Math.floor(opts.time)))
+  const token = await mux.jwt.signPlaybackId(playbackId, { type: 'thumbnail', expiration: '2d', params })
   return `https://image.mux.com/${playbackId}/thumbnail.webp?token=${token}`
+}
+
+/** A representative frame: a fifth of the way in, capped at one minute. */
+export function frameTime(durationSeconds: number | null | undefined): number {
+  if (!durationSeconds || durationSeconds <= 0) return 0
+  return Math.min(60, durationSeconds * 0.2)
 }

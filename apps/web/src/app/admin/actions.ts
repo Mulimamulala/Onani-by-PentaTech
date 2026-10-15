@@ -119,6 +119,8 @@ export async function createVideoUpload(_prev: UploadState, formData: FormData):
 
   const upload = await mux.video.uploads.create({
     cors_origin: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
+    // Big files on slow connections: keep the upload URL valid for a day (Mux default is 1 hour).
+    timeout: 86400,
     new_asset_settings: {
       playback_policies: ['signed'],
       // 'basic' quality has no encoding cost on Mux; switch to 'plus' for premium titles.

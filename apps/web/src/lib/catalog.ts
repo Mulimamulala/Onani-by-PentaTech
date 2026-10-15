@@ -1,5 +1,6 @@
 import 'server-only'
 import { cacheLife, cacheTag } from 'next/cache'
+import { frameTime, signedThumbnailUrl } from '@/lib/mux'
 import { createPublicClient } from '@/lib/supabase/server'
 
 // Public catalog reads. Cached on the server and refreshed via the 'catalog'
@@ -9,7 +10,14 @@ export const CATALOG_TAG = 'catalog'
 const TITLE_FIELDS =
   'id, slug, kind, name, synopsis, poster_url, backdrop_url, release_year, maturity_rating, genres, is_free, is_featured, published_at'
 
-/** Every published title, newest first. */
+// A title's first ready video doubles as its artwork until a poster is uploaded.
+// Thumbnail tokens last two days; cached entries expire well before that.
+async function frameFor(video: { mux_playback_id: string | null; duration_seconds: number | null } | undefined, width?: number) {
+  if (!video?.mux_playback_id) return null
+  return signedThumbnailUrl(video.mux_playback_id, { width, time: frameTime(video.duration_seconds) })
+}
+
+/** Every published title, newest first, with a frame_url for artwork. */
 export async function getAllTitles() {
   'use cache'
   cacheTag(CATALOG_TAG)
@@ -17,11 +25,17 @@ export async function getAllTitles() {
 
   const { data, error } = await createPublicClient()
     .from('titles')
-    .select(TITLE_FIELDS)
+    .select(`${TITLE_FIELDS}, videos (mux_playback_id, duration_seconds)`)
     .order('published_at', { ascending: false })
+    .order('season_number', { referencedTable: 'videos', ascending: true, nullsFirst: true })
+    .order('episode_number', { referencedTable: 'videos', ascending: true, nullsFirst: true })
+    .limit(1, { referencedTable: 'videos' })
     .limit(500)
   if (error) throw error
-  return data ?? []
+
+  return Promise.all(
+    (data ?? []).map(async ({ videos, ...title }) => ({ ...title, frame_url: await frameFor(videos[0]) })),
+  )
 }
 
 export async function getHomeCatalog() {
@@ -56,14 +70,23 @@ export async function getTitleBySlug(slug: string) {
   const { data, error } = await createPublicClient()
     .from('titles')
     .select(
-      `${TITLE_FIELDS}, videos (id, name, synopsis, season_number, episode_number, duration_seconds)`,
+      `${TITLE_FIELDS}, videos (id, name, synopsis, season_number, episode_number, duration_seconds, mux_playback_id)`,
     )
     .eq('slug', slug)
     .order('season_number', { referencedTable: 'videos', ascending: true, nullsFirst: true })
     .order('episode_number', { referencedTable: 'videos', ascending: true, nullsFirst: true })
     .maybeSingle()
   if (error) throw error
-  return data
+  if (!data) return null
+
+  const videos = await Promise.all(
+    data.videos.map(async ({ mux_playback_id, ...v }) => ({
+      ...v,
+      frame_url: await frameFor({ mux_playback_id, duration_seconds: v.duration_seconds }, 640),
+    })),
+  )
+  const frame_url = await frameFor(data.videos[0])
+  return { ...data, videos, frame_url }
 }
 
 export async function getActivePlans() {

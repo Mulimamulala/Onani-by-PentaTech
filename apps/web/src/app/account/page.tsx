@@ -56,7 +56,7 @@ async function Details() {
             <p className="mt-1 text-sm text-ink-muted">You can still watch titles marked Free.</p>
             <Link
               href="/plans"
-              className="mt-4 inline-block rounded-full bg-gold px-6 py-3 text-sm font-bold text-gold-ink transition-colors hover:bg-gold-hover"
+              className="mt-4 inline-block rounded-full bg-ink px-6 py-3 text-sm font-bold text-bg transition hover:opacity-85"
             >
               See plans
             </Link>
@@ -66,7 +66,7 @@ async function Details() {
 
       <div className="flex flex-wrap gap-3 pt-2">
         {user.isAdmin && (
-          <Link href="/admin" className="rounded-full border border-gold-border px-5 py-3 text-sm font-semibold text-gold hover:bg-gold-subtle">
+          <Link href="/admin" className="rounded-full border border-hairline px-5 py-3 text-sm font-semibold text-ink-muted hover:bg-surface">
             Admin dashboard
           </Link>
         )}
