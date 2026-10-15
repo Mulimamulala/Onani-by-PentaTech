@@ -62,7 +62,7 @@ async function TitleDetails({ params }: { params: PageProps<'/title/[slug]'>['pa
 
   return (
     <div className="space-y-12">
-      <section data-hero className={`${HERO_SHELL} min-h-[72svh] md:min-h-[78vh]`}>
+      <section data-hero className={`${HERO_SHELL} min-h-[72svh] md:min-h-[78vh] short:min-h-[100svh]`}>
         {image ? (
           <Image
             src={image}
@@ -82,12 +82,12 @@ async function TitleDetails({ params }: { params: PageProps<'/title/[slug]'>['pa
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/60 to-black/10" />
         <div className="absolute inset-0 -z-10 hidden bg-gradient-to-r from-black/85 via-black/30 to-transparent md:block" />
 
-        <div className="mx-auto w-full max-w-[1600px] px-4 pb-8 md:px-10 md:pb-16">
+        <div className="mx-auto w-full max-w-[1600px] px-4 pb-8 pt-24 md:px-10 md:pb-16 short:pb-5 short:pt-20">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-2">
               {title.kind === 'series' ? 'Series' : 'Film'}
             </p>
-            <h1 className="mt-2 text-[40px] font-bold leading-[1.02] tracking-[-0.04em] sm:text-6xl md:text-7xl">{title.name}</h1>
+            <h1 className="mt-2 text-[clamp(2.5rem,min(10vw,12svh),6rem)] font-bold leading-[0.98] tracking-[-0.045em]">{title.name}</h1>
 
             <ul className="mt-4 flex flex-wrap items-center gap-2 text-sm text-ink-2">
               {title.maturity_rating && (
@@ -111,7 +111,7 @@ async function TitleDetails({ params }: { params: PageProps<'/title/[slug]'>['pa
               <p className="mt-6 inline-block rounded-full bg-white/15 px-5 py-3 text-sm font-semibold text-ink-2 backdrop-blur">Coming soon</p>
             )}
 
-            {title.synopsis && <p className="mt-6 text-[15px] leading-relaxed text-ink-2 md:text-lg">{title.synopsis}</p>}
+            {title.synopsis && <p className="mt-6 text-[15px] leading-relaxed text-ink-2 md:text-lg short:mt-3 short:line-clamp-2">{title.synopsis}</p>}
           </div>
         </div>
       </section>
@@ -164,7 +164,9 @@ async function TitleDetails({ params }: { params: PageProps<'/title/[slug]'>['pa
         </section>
       )}
 
-      <Rail heading="More like this" titles={related} />
+      <div className="mx-auto max-w-[1600px]">
+        <Rail heading="More like this" titles={related} />
+      </div>
     </div>
   )
 }

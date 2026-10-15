@@ -40,7 +40,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
       data-hero
       aria-roledescription="carousel"
       aria-label="Featured"
-      className={`${HERO_SHELL} min-h-[82svh] md:min-h-[92vh]`}
+      className={`${HERO_SHELL} min-h-[82svh] md:min-h-[92vh] short:min-h-[100svh]`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -81,7 +81,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/40 to-black/20" />
       <div className="absolute inset-0 -z-10 hidden bg-gradient-to-r from-black/85 via-black/35 to-transparent md:block" />
 
-      <div className="mx-auto w-full max-w-[1600px] px-4 pb-8 md:px-10 md:pb-16">
+      <div className="mx-auto w-full max-w-[1600px] px-4 pb-8 md:px-10 md:pb-16 short:pb-5">
         <div key={slide.slug} className="max-w-2xl animate-[hero-in_700ms_var(--ease-out-soft)_both]">
           <p className="flex flex-wrap items-center gap-x-2 text-xs font-semibold uppercase tracking-[0.16em] text-ink-2">
             {meta.map((m, i) => (
@@ -92,11 +92,11 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
             ))}
             {slide.is_free && <span className="ml-1 rounded-full bg-white px-2 py-0.5 text-[10px] tracking-wide text-black">Free</span>}
           </p>
-          <h1 className="mt-3 text-[44px] font-bold leading-[0.98] tracking-[-0.045em] sm:text-6xl md:text-8xl">{slide.name}</h1>
+          <h1 className="mt-3 text-[clamp(2.5rem,min(10vw,12svh),6rem)] font-bold leading-[0.98] tracking-[-0.045em] short:mt-2">{slide.name}</h1>
           {slide.synopsis && (
-            <p className="mt-4 line-clamp-3 max-w-xl text-[15px] leading-relaxed text-ink-2 md:text-lg">{slide.synopsis}</p>
+            <p className="mt-4 line-clamp-3 max-w-xl text-[15px] leading-relaxed text-ink-2 md:text-lg short:hidden">{slide.synopsis}</p>
           )}
-          <div className="mt-7 flex flex-wrap items-center gap-3">
+          <div className="mt-7 flex flex-wrap items-center gap-3 short:mt-4">
             <Link href={`/title/${slide.slug}`} className={primaryButton}>
               <PlayIcon className="size-5" />
               {slide.is_free ? 'Watch free' : 'Play'}
@@ -108,7 +108,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
           </div>
         </div>
 
-        <div className="mt-8 flex items-center gap-4 md:mt-12">
+        <div className="mt-8 flex items-center gap-4 md:mt-12 short:mt-4">
           {count > 1 && (
             <>
               <div className="flex flex-1 items-center gap-2 md:max-w-md" role="tablist" aria-label="Choose a featured title">

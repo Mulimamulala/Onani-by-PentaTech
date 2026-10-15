@@ -12,9 +12,14 @@ const TITLE_FIELDS =
 
 // A title's first ready video doubles as its artwork until a poster is uploaded.
 // Thumbnail tokens last two days; cached entries expire well before that.
-async function frameFor(video: { mux_playback_id: string | null; duration_seconds: number | null } | undefined, width?: number) {
+type FrameSource = { mux_playback_id: string | null; duration_seconds: number | null; cover_time_seconds?: number | null }
+
+async function frameFor(video: FrameSource | undefined, width?: number) {
   if (!video?.mux_playback_id) return null
-  return signedThumbnailUrl(video.mux_playback_id, { width, time: frameTime(video.duration_seconds) })
+  return signedThumbnailUrl(video.mux_playback_id, {
+    width,
+    time: video.cover_time_seconds ?? frameTime(video.duration_seconds),
+  })
 }
 
 /** Every published title, newest first, with a frame_url for artwork. */
@@ -25,7 +30,7 @@ export async function getAllTitles() {
 
   const { data, error } = await createPublicClient()
     .from('titles')
-    .select(`${TITLE_FIELDS}, videos (mux_playback_id, duration_seconds)`)
+    .select(`${TITLE_FIELDS}, videos (mux_playback_id, duration_seconds, cover_time_seconds)`)
     .order('published_at', { ascending: false })
     .order('season_number', { referencedTable: 'videos', ascending: true, nullsFirst: true })
     .order('episode_number', { referencedTable: 'videos', ascending: true, nullsFirst: true })
@@ -67,7 +72,7 @@ export async function getHeroSlides() {
       maturity_rating: t.maturity_rating,
       image: t.backdrop_url ?? t.frame_url ?? t.poster_url,
       preview: first_video?.mux_playback_id
-        ? await signPreview(first_video.mux_playback_id, first_video.duration_seconds)
+        ? await signPreview(first_video.mux_playback_id, first_video.duration_seconds, first_video.cover_time_seconds)
         : null,
     })),
   )
@@ -103,7 +108,7 @@ export async function getTitleBySlug(slug: string) {
   const { data, error } = await createPublicClient()
     .from('titles')
     .select(
-      `${TITLE_FIELDS}, videos (id, name, synopsis, season_number, episode_number, duration_seconds, mux_playback_id)`,
+      `${TITLE_FIELDS}, videos (id, name, synopsis, season_number, episode_number, duration_seconds, mux_playback_id, cover_time_seconds)`,
     )
     .eq('slug', slug)
     .order('season_number', { referencedTable: 'videos', ascending: true, nullsFirst: true })
@@ -113,14 +118,16 @@ export async function getTitleBySlug(slug: string) {
   if (!data) return null
 
   const videos = await Promise.all(
-    data.videos.map(async ({ mux_playback_id, ...v }) => ({
+    data.videos.map(async ({ mux_playback_id, cover_time_seconds, ...v }) => ({
       ...v,
-      frame_url: await frameFor({ mux_playback_id, duration_seconds: v.duration_seconds }, 640),
+      frame_url: await frameFor({ mux_playback_id, duration_seconds: v.duration_seconds, cover_time_seconds }, 640),
     })),
   )
   const first = data.videos[0]
   const frame_url = await frameFor(first)
-  const preview = first?.mux_playback_id ? await signPreview(first.mux_playback_id, first.duration_seconds) : null
+  const preview = first?.mux_playback_id
+    ? await signPreview(first.mux_playback_id, first.duration_seconds, first.cover_time_seconds)
+    : null
   return { ...data, videos, frame_url, preview }
 }
 

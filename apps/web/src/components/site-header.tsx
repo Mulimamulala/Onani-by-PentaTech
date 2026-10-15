@@ -10,7 +10,7 @@ import { SearchButton } from './search-button'
 export function SiteHeader() {
   return (
     <HeaderShell>
-      <div className="grid h-14 grid-cols-[1fr_auto] items-center gap-4 px-3 md:h-16 md:grid-cols-[1fr_auto_1fr] md:px-4">
+      <div className="grid h-14 grid-cols-[1fr_auto] items-center gap-4 px-2 md:h-16 md:grid-cols-[1fr_auto_1fr] md:px-6 short:h-12">
         <OnaniLogo />
         <div className="hidden md:block">
           <Suspense fallback={<NavPillsFallback />}>

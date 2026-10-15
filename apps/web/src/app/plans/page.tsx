@@ -20,7 +20,7 @@ export default async function PlansPage() {
 
       <div className="mx-auto max-w-5xl px-4 pt-24 md:px-10 md:pt-32">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-muted">Plans</p>
-        <h1 className="mt-2 max-w-2xl text-[40px] font-bold leading-[1.02] tracking-[-0.04em] md:text-6xl">
+        <h1 className="mt-2 max-w-2xl text-[clamp(2.25rem,min(8vw,11svh),4.5rem)] font-bold leading-[1.02] tracking-[-0.04em]">
           One plan. Everything on Onani.
         </h1>
         <p className="mt-4 max-w-xl text-ink-2 md:text-lg">No contracts and no card required. Pay with mobile money and watch straight away.</p>

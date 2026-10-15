@@ -25,7 +25,7 @@ export default async function HomePage() {
     <div className="space-y-10 md:space-y-14">
       {slides.length > 0 ? <HeroCarousel slides={slides} /> : <WelcomeHero priceLabel={priceLabel} />}
 
-      <div className="space-y-10 md:space-y-12">
+      <div className="mx-auto w-full max-w-[1600px] space-y-10 md:space-y-12">
         <Suspense fallback={null}>
           <ContinueWatching />
         </Suspense>

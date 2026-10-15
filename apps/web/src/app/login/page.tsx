@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'Sign in' }
 
 export default function LoginPage({ searchParams }: PageProps<'/login'>) {
   return (
-    <div className="relative isolate flex min-h-[90svh] items-center justify-center overflow-hidden px-4 pt-20">
+    <div className="relative isolate flex min-h-[90svh] items-center justify-center overflow-hidden px-4 pb-10 pt-20 short:pt-16">
       <PentagonField className="absolute left-1/2 top-1/2 -z-10 w-[160%] max-w-[900px] -translate-x-1/2 -translate-y-1/2 opacity-70" />
       <div className="w-full max-w-sm rounded-[24px] bg-surface/90 p-6 ring-1 ring-hairline-soft backdrop-blur-xl md:p-8">
         <Wordmark className="text-2xl" />

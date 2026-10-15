@@ -6,13 +6,13 @@ export { HERO_SHELL, primaryButton, secondaryButton }
 /** Brand-led hero for when the catalog is still empty. */
 export function WelcomeHero({ priceLabel }: { priceLabel: string | null }) {
   return (
-    <section data-hero className={`${HERO_SHELL} min-h-[78svh] md:min-h-[86vh]`}>
+    <section data-hero className={`${HERO_SHELL} min-h-[78svh] md:min-h-[86vh] short:min-h-[100svh]`}>
       <PosterWall />
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/80 to-black/30" />
       <div className="absolute inset-0 -z-10 hidden bg-gradient-to-r from-black via-black/60 to-transparent md:block" />
-      <div className="mx-auto w-full max-w-[1600px] px-4 pb-12 md:px-10 md:pb-24">
+      <div className="mx-auto w-full max-w-[1600px] px-4 pb-12 md:px-10 md:pb-24 short:pb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-2">Onani means “watch”</p>
-        <h1 className="mt-3 max-w-3xl text-[40px] font-bold leading-[1.02] tracking-[-0.04em] sm:text-6xl md:text-7xl">
+        <h1 className="mt-3 max-w-3xl text-[clamp(2.5rem,min(10vw,12svh),6rem)] font-bold leading-[0.98] tracking-[-0.045em]">
           Films and series, made to watch anywhere.
         </h1>
         <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-ink-2 md:text-lg">

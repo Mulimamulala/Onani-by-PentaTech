@@ -1,6 +1,6 @@
 import { revalidateTag } from 'next/cache'
 import { CATALOG_TAG } from '@/lib/catalog'
-import { mux } from '@/lib/mux'
+import { mux, pickCoverTime } from '@/lib/mux'
 import { createAdminClient } from '@/lib/supabase/server'
 
 // Mux → Onani. Configure in Mux: Settings → Webhooks → https://<site>/api/webhooks/mux
@@ -30,12 +30,14 @@ export async function POST(request: Request) {
       const playbackId = asset.playback_ids?.find((p) => p.policy === 'signed')?.id ?? null
       const videoId = asset.passthrough
       if (!videoId) break
+      const coverTime = playbackId ? await pickCoverTime(playbackId, asset.duration ?? null) : null
       await db
         .from('videos')
         .update({
           mux_asset_id: asset.id,
           mux_playback_id: playbackId,
           duration_seconds: asset.duration ?? null,
+          cover_time_seconds: coverTime,
           status: 'ready',
         })
         .eq('id', videoId)

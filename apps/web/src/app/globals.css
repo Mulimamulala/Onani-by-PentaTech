@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Phones held sideways: wide but very short. */
+@custom-variant short (@media (orientation: landscape) and (max-height: 520px));
+
 /*
  * Onani tokens, from the PentaTech IT design system (Light and Dark themes).
  * Gray does the work. PentaTech Gold appears only in the Onani mark, focus rings

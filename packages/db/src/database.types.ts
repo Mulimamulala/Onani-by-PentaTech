@@ -66,6 +66,7 @@ export type Database = {
           mux_upload_id: string | null
           mux_asset_id: string | null
           mux_playback_id: string | null
+          cover_time_seconds: number | null
           created_at: Timestamp
           updated_at: Timestamp
         }
@@ -81,6 +82,7 @@ export type Database = {
           mux_upload_id?: string | null
           mux_asset_id?: string | null
           mux_playback_id?: string | null
+          cover_time_seconds?: number | null
           created_at?: Timestamp
           updated_at?: Timestamp
         }
