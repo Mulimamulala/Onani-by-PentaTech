@@ -50,12 +50,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main" className="flex-1">{children}</main>
-        <SiteFooter />
+        {/* Fixed to the bottom of the screen; kept early in the document so its
+            streamed boundary resolves with the header's instead of after the footer. */}
         <Suspense fallback={null}>
           <BottomNav />
         </Suspense>
+        <SiteHeader />
+        <main id="main" className="flex-1">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );
