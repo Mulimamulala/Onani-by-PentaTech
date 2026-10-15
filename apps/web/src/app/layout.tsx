@@ -39,6 +39,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="pb-tabbar flex min-h-full flex-col font-sans">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if(location.search.includes('debughydration')){var keep=[];document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('main *, header *, footer *').forEach(function(e){keep.push(e)});setTimeout(function(){var gone=keep.filter(function(e){return !document.contains(e)});var tops=gone.filter(function(e){return !gone.includes(e.parentElement)});window.__hydrationReport={total:keep.length,detached:gone.length,tops:tops.slice(0,8).map(function(e){return e.tagName+'.'+String(e.className).slice(0,60)+' :: '+(e.textContent||'').trim().slice(0,60)})}},7000)})}`,
+          }}
+        />
         <a
           href="#main"
           className="sr-only z-50 rounded-full bg-ink px-4 py-2 font-bold text-bg focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
