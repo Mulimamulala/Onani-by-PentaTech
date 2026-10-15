@@ -1,40 +1,49 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Montserrat } from "next/font/google";
+import { Suspense } from "react";
+import { BottomNav } from "@/components/bottom-nav";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: {
-    default: "Onani: Watch Zambian",
+    default: "Onani: Watch films and series",
     template: "%s · Onani",
   },
-  description: "Onani by PentaTech. Films and series, streaming anywhere.",
+  description: "Onani by PentaTech. Stream films and series on your phone, laptop or TV. Plans from K25 a week, paid with mobile money.",
   openGraph: { siteName: "Onani", type: "website" },
+  appleWebApp: { title: "Onani", statusBarStyle: "black-translucent" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col font-sans">
+    <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
+      <body className="pb-tabbar flex min-h-full flex-col font-sans">
+        <a
+          href="#main"
+          className="sr-only z-50 rounded-full bg-gold px-4 py-2 font-bold text-gold-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        >
+          Skip to content
+        </a>
         <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <footer className="border-t border-border px-4 py-8 text-center text-sm text-muted sm:px-8">
-          Onani by PentaTech
-        </footer>
+        <main id="main" className="flex-1">{children}</main>
+        <SiteFooter />
+        <Suspense fallback={null}>
+          <BottomNav />
+        </Suspense>
       </body>
     </html>
   );

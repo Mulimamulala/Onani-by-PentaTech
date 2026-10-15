@@ -29,7 +29,7 @@ export function Player(props: {
       playbackId={props.playbackId}
       tokens={props.tokens}
       startTime={props.startTime}
-      accentColor="#f5a524"
+      accentColor="#daa520"
       autoPlay
       metadata={{
         video_id: props.videoId,

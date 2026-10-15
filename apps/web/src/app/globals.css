@@ -1,36 +1,83 @@
 @import "tailwindcss";
 
+/*
+ * Onani tokens, adapted from the PentaTech IT design system (dark theme).
+ * Gray does the work; PentaTech Gold marks the brand and the one primary action.
+ * Gold is used as a fill with black text (9.6:1) or as text on black (9.6:1),
+ * never as text on light grounds.
+ */
 :root {
-  --background: #0b0b0f;
-  --surface: #16161d;
-  --surface-2: #1f1f29;
-  --foreground: #f4f4f6;
-  --muted: #9a9aa8;
-  --accent: #f5a524;
-  --accent-foreground: #120d02;
-  --border: #2a2a36;
+  --bg: #000000;
+  --surface: #1d1d1f;
+  --surface-2: #2c2c2e;
+  --hairline: #424245;
+  --hairline-soft: #2c2c2e;
+  --ink: #f5f5f7;
+  --ink-2: #d2d2d7;
+  --ink-muted: #a1a1a6;
+  --gold: #daa520;
+  --gold-hover: #c89518;
+  --gold-ink: #000000;
+  --gold-subtle: rgba(218, 165, 32, 0.12);
+  --gold-border: rgba(218, 165, 32, 0.32);
+  --scrim: rgba(0, 0, 0, 0.88);
+  --positive: #4fd1a0;
+  --negative: #f08a55;
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-border: var(--border);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-hairline: var(--hairline);
+  --color-hairline-soft: var(--hairline-soft);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-muted: var(--ink-muted);
+  --color-gold: var(--gold);
+  --color-gold-hover: var(--gold-hover);
+  --color-gold-ink: var(--gold-ink);
+  --color-gold-subtle: var(--gold-subtle);
+  --color-gold-border: var(--gold-border);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+
+  /* Older names used by the admin screens */
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --color-muted: var(--ink-muted);
+  --color-accent: var(--gold);
+  --color-accent-foreground: var(--gold-ink);
+  --color-border: var(--hairline);
+
+  --font-sans: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
+
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  --ease-out-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 html {
   color-scheme: dark;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--gold-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
 }
 
 .no-scrollbar {
@@ -38,4 +85,24 @@ body {
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Bottom padding so content clears the mobile tab bar and the home indicator. */
+.pb-tabbar {
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+}
+@media (min-width: 768px) {
+  .pb-tabbar {
+    padding-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

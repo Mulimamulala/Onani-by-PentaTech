@@ -8,3 +8,4 @@ out
 *.tsbuildinfo
 supabase/.temp
 supabase/.branches
+.claude/

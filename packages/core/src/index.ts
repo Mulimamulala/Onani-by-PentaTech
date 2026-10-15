@@ -27,9 +27,9 @@ export function formatDuration(totalSeconds: number | null | undefined): string 
   return m === 0 ? `${h}h` : `${h}h ${m}m`
 }
 
-/** 7500, 'ZMW' → "K75.00" */
+/** 7500, 'ZMW' → "K75"; 7550 → "K75.50" */
 export function formatPrice(minor: number, currency: string): string {
-  const major = (minor / 100).toFixed(2)
+  const major = minor % 100 === 0 ? String(minor / 100) : (minor / 100).toFixed(2)
   return currency === 'ZMW' ? `K${major}` : `${currency} ${major}`
 }
 

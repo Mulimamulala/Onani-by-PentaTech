@@ -9,7 +9,8 @@ export const CATALOG_TAG = 'catalog'
 const TITLE_FIELDS =
   'id, slug, kind, name, synopsis, poster_url, backdrop_url, release_year, maturity_rating, genres, is_free, is_featured, published_at'
 
-export async function getHomeCatalog() {
+/** Every published title, newest first. */
+export async function getAllTitles() {
   'use cache'
   cacheTag(CATALOG_TAG)
   cacheLife('minutes')
@@ -18,25 +19,33 @@ export async function getHomeCatalog() {
     .from('titles')
     .select(TITLE_FIELDS)
     .order('published_at', { ascending: false })
-    .limit(100)
+    .limit(500)
   if (error) throw error
+  return data ?? []
+}
 
-  const titles = data ?? []
-  const featured = titles.find((t) => t.is_featured) ?? titles[0] ?? null
-
-  const byGenre = new Map<string, typeof titles>()
-  for (const t of titles) {
-    for (const g of t.genres) {
-      byGenre.set(g, [...(byGenre.get(g) ?? []), t])
-    }
-  }
+export async function getHomeCatalog() {
+  const titles = await getAllTitles()
+  const featured = titles.filter((t) => t.is_featured)
+  const hero = featured[0] ?? titles[0] ?? null
 
   return {
-    featured,
+    hero,
     latest: titles.slice(0, 20),
     free: titles.filter((t) => t.is_free),
-    genres: [...byGenre.entries()].sort((a, b) => b[1].length - a[1].length).slice(0, 6),
+    films: titles.filter((t) => t.kind === 'movie'),
+    series: titles.filter((t) => t.kind === 'series'),
+    genres: groupByGenre(titles).slice(0, 6),
+    total: titles.length,
   }
+}
+
+export function groupByGenre<T extends { genres: string[] }>(titles: T[]): [string, T[]][] {
+  const byGenre = new Map<string, T[]>()
+  for (const t of titles) {
+    for (const g of t.genres) byGenre.set(g, [...(byGenre.get(g) ?? []), t])
+  }
+  return [...byGenre.entries()].sort((a, b) => b[1].length - a[1].length)
 }
 
 export async function getTitleBySlug(slug: string) {

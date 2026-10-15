@@ -17,7 +17,7 @@ const STATUS_STYLES = {
 
 export default function AdminTitlePage({ params }: PageProps<'/admin/titles/[id]'>) {
   return (
-    <div className="mx-auto max-w-5xl space-y-10 px-4 py-10 sm:px-8">
+    <div className="mx-auto max-w-5xl space-y-10 px-4 pb-10 pt-24 sm:px-8">
       <Link href="/admin" className="text-sm text-muted hover:text-foreground">← All titles</Link>
       <Suspense fallback={<p className="text-muted">Loading…</p>}>
         <EditTitle params={params} />
@@ -46,7 +46,7 @@ async function EditTitle({ params }: { params: PageProps<'/admin/titles/[id]'>['
     <>
       <section>
         <div className="mb-4 flex items-baseline justify-between">
-          <h1 className="text-2xl font-bold">{title.name}</h1>
+          <h1 className="text-3xl font-bold tracking-[-0.03em]">{title.name}</h1>
           {title.published_at && (
             <Link href={`/title/${title.slug}`} className="text-sm text-accent">View on site →</Link>
           )}
@@ -57,7 +57,7 @@ async function EditTitle({ params }: { params: PageProps<'/admin/titles/[id]'>['
       <section>
         <h2 className="mb-4 text-lg font-semibold">Videos</h2>
         {videos.length > 0 && (
-          <ul className="mb-6 divide-y divide-border rounded-lg border border-border">
+          <ul className="mb-6 divide-y divide-border rounded-[18px] border border-border">
             {videos.map((v) => (
               <li key={v.id} className="flex items-center gap-4 p-4">
                 <span className="w-16 text-sm text-muted">{episodeLabel(v.season_number, v.episode_number)}</span>

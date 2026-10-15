@@ -6,6 +6,7 @@ import { canWatch, episodeLabel } from '@onani/core'
 import { requireUser } from '@/lib/auth'
 import { signPlayback } from '@/lib/mux'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
+import { ChevronLeftIcon, LockIcon } from '@/components/icons'
 import { Player } from './player'
 
 export const metadata: Metadata = { title: 'Watch', robots: { index: false } }
@@ -46,11 +47,20 @@ async function Watch({ params }: { params: PageProps<'/watch/[videoId]'>['params
 
   if (!allowed) {
     return (
-      <div className="mx-auto max-w-md px-4 py-24 text-center">
-        <h1 className="text-2xl font-bold">Subscribe to watch {video.title.name}</h1>
-        <p className="mt-2 text-muted">Pick a plan to unlock the full Onani catalog.</p>
-        <Link href="/plans" className="mt-6 inline-block rounded-md bg-accent px-6 py-3 font-semibold text-accent-foreground">
+      <div className="mx-auto flex min-h-[80svh] max-w-md flex-col items-center justify-center px-4 pt-16 text-center">
+        <span className="grid size-14 place-items-center rounded-full bg-gold-subtle text-gold ring-1 ring-gold-border">
+          <LockIcon className="size-6" />
+        </span>
+        <h1 className="mt-5 text-3xl font-bold tracking-[-0.03em]">Subscribe to watch {video.title.name}.</h1>
+        <p className="mt-2 text-ink-muted">One plan unlocks every film and series on Onani. Pay with mobile money or card.</p>
+        <Link
+          href="/plans"
+          className="mt-6 w-full rounded-full bg-gold px-6 py-4 font-bold text-gold-ink transition-colors hover:bg-gold-hover sm:w-auto"
+        >
           See plans
+        </Link>
+        <Link href={`/title/${video.title.slug}`} className="mt-4 text-sm font-semibold text-ink-muted hover:text-ink">
+          Back to {video.title.name}
         </Link>
       </div>
     )
@@ -63,7 +73,7 @@ async function Watch({ params }: { params: PageProps<'/watch/[videoId]'>['params
     .join(' · ')
 
   return (
-    <div className="bg-black">
+    <div className="bg-black pt-16">
       <Player
         videoId={video.id}
         playbackId={video.mux_playback_id}
@@ -72,11 +82,15 @@ async function Watch({ params }: { params: PageProps<'/watch/[videoId]'>['params
         title={label}
         viewerUserId={user.id}
       />
-      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-8">
-        <Link href={`/title/${video.title.slug}`} className="text-sm text-muted hover:text-foreground">
-          ← {video.title.name}
+      <div className="mx-auto max-w-[1600px] px-4 py-5 md:px-10">
+        <Link
+          href={`/title/${video.title.slug}`}
+          className="inline-flex items-center gap-1 text-sm font-semibold text-ink-muted hover:text-ink"
+        >
+          <ChevronLeftIcon className="size-4" />
+          {video.title.name}
         </Link>
-        <h1 className="mt-1 text-xl font-semibold">{label}</h1>
+        <h1 className="mt-1 text-xl font-bold tracking-[-0.02em] md:text-2xl">{label}</h1>
       </div>
     </div>
   )

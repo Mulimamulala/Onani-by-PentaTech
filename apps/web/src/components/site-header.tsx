@@ -1,26 +1,44 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { getCurrentUser } from '@/lib/auth'
-import { signOut } from '@/app/login/actions'
+import { OnaniLogo } from './brand'
+import { HeaderShell } from './header-shell'
+import { SearchIcon } from './icons'
+
+const NAV = [
+  { href: '/', label: 'Home' },
+  { href: '/browse?type=movie', label: 'Films' },
+  { href: '/browse?type=series', label: 'Series' },
+  { href: '/browse?free=1', label: 'Free' },
+  { href: '/plans', label: 'Plans' },
+]
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-8">
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          onani<span className="text-accent">.</span>
-        </Link>
-        <nav className="flex gap-4 text-sm text-muted">
-          <Link href="/" className="hover:text-foreground">Home</Link>
-          <Link href="/plans" className="hover:text-foreground">Plans</Link>
+    <HeaderShell>
+      <div className="mx-auto flex h-16 max-w-[1600px] items-center gap-8 px-4 md:px-10">
+        <OnaniLogo />
+        <nav aria-label="Main" className="hidden gap-6 text-sm font-semibold text-ink-2 md:flex">
+          {NAV.map((item) => (
+            <Link key={item.href} href={item.href} className="transition-colors hover:text-ink">
+              {item.label}
+            </Link>
+          ))}
         </nav>
-        <div className="ml-auto">
-          <Suspense fallback={<div className="h-8 w-20" />}>
+        <div className="ml-auto flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/browse"
+            aria-label="Browse and search"
+            className="grid size-10 place-items-center rounded-full text-ink-2 transition-colors hover:bg-white/10 hover:text-ink"
+          >
+            <SearchIcon />
+          </Link>
+          <Suspense fallback={<div className="size-9" />}>
             <UserMenu />
           </Suspense>
         </div>
       </div>
-    </header>
+    </HeaderShell>
   )
 }
 
@@ -31,22 +49,31 @@ async function UserMenu() {
     return (
       <Link
         href="/login"
-        className="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90"
+        className="rounded-full bg-gold px-4 py-2 text-sm font-bold text-gold-ink transition-colors hover:bg-gold-hover"
       >
         Sign in
       </Link>
     )
   }
 
+  const initial = (user.email ?? '?').charAt(0).toUpperCase()
   return (
-    <div className="flex items-center gap-4 text-sm">
+    <div className="flex items-center gap-3">
       {user.isAdmin && (
-        <Link href="/admin" className="text-muted hover:text-foreground">Admin</Link>
+        <Link
+          href="/admin"
+          className="hidden rounded-full border border-gold-border px-3 py-1.5 text-xs font-semibold text-gold transition-colors hover:bg-gold-subtle sm:inline-block"
+        >
+          Admin
+        </Link>
       )}
-      <span className="hidden text-muted sm:inline">{user.email}</span>
-      <form action={signOut}>
-        <button className="rounded-md border border-border px-3 py-1.5 hover:bg-surface-2">Sign out</button>
-      </form>
+      <Link
+        href="/account"
+        aria-label="Your account"
+        className="grid size-9 place-items-center rounded-full bg-surface-2 text-sm font-bold ring-1 ring-hairline transition hover:ring-gold"
+      >
+        {initial}
+      </Link>
     </div>
   )
 }

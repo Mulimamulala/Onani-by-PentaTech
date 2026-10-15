@@ -9,8 +9,8 @@ export const metadata: Metadata = { title: 'Admin', robots: { index: false } }
 
 export default function AdminPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-12 px-4 py-10 sm:px-8">
-      <h1 className="text-2xl font-bold">Admin</h1>
+    <div className="mx-auto max-w-5xl space-y-12 px-4 pb-10 pt-24 sm:px-8">
+      <h1 className="text-3xl font-bold tracking-[-0.03em]">Admin</h1>
       <Suspense fallback={<p className="text-muted">Loading…</p>}>
         <Dashboard />
       </Suspense>
@@ -31,7 +31,7 @@ async function Dashboard() {
       <section>
         <h2 className="mb-4 text-lg font-semibold">Titles</h2>
         {titles && titles.length > 0 ? (
-          <ul className="divide-y divide-border rounded-lg border border-border">
+          <ul className="divide-y divide-border rounded-[18px] border border-border">
             {titles.map((t) => {
               const ready = t.videos.filter((v) => v.status === 'ready').length
               return (

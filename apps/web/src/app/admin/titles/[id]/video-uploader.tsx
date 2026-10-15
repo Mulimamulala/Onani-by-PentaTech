@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useActionState, useState } from 'react'
 import { createVideoUpload, type UploadState } from '../../actions'
 
-const input = 'w-full rounded-md border border-border bg-surface px-3 py-2 outline-none focus:border-accent'
+const input = 'w-full rounded-[14px] border border-border bg-surface px-3 py-2 outline-none focus:border-accent'
 
 export function VideoUploader({ titleId, isSeries }: { titleId: string; isSeries: boolean }) {
   const router = useRouter()
@@ -14,7 +14,7 @@ export function VideoUploader({ titleId, isSeries }: { titleId: string; isSeries
 
   if (state.uploadUrl) {
     return (
-      <div className="space-y-3 rounded-lg border border-border p-5">
+      <div className="space-y-3 rounded-[18px] border border-border p-5">
         <p className="text-sm text-muted">
           {done
             ? 'Upload complete. Mux is processing the video; its status turns "ready" in a minute or two (refresh to check).'
@@ -32,7 +32,7 @@ export function VideoUploader({ titleId, isSeries }: { titleId: string; isSeries
   }
 
   return (
-    <form action={action} className="grid gap-4 rounded-lg border border-border p-5 sm:grid-cols-2">
+    <form action={action} className="grid gap-4 rounded-[18px] border border-border p-5 sm:grid-cols-2">
       <input type="hidden" name="title_id" value={titleId} />
       <label className="block space-y-1 text-sm sm:col-span-2">
         <span className="font-medium">{isSeries ? 'Episode name' : 'Video name'}</span>
@@ -55,7 +55,7 @@ export function VideoUploader({ titleId, isSeries }: { titleId: string; isSeries
         <textarea name="synopsis" rows={2} className={input} />
       </label>
       <div className="flex items-center gap-4 sm:col-span-2">
-        <button disabled={pending} className="rounded-md bg-accent px-5 py-2 font-semibold text-accent-foreground disabled:opacity-60">
+        <button disabled={pending} className="rounded-[14px] bg-accent px-5 py-2 font-semibold text-accent-foreground disabled:opacity-60">
           {pending ? 'Preparing…' : 'Next: choose file'}
         </button>
         {state.error && <p className="text-sm text-red-400">{state.error}</p>}
