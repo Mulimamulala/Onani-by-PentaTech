@@ -59,7 +59,7 @@ export function Player(props: {
   return (
     <div
       id={STAGE_ID}
-      className="relative mx-auto aspect-video max-h-[80vh] w-full select-none bg-black"
+      className="relative mx-auto aspect-video w-full max-w-[calc(80vh*16/9)] select-none bg-black"
       onContextMenu={(e) => e.preventDefault()}
     >
       <MuxPlayer
