@@ -37,11 +37,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${montserrat.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `if(location.search.includes('debughydration')){var L=[];var d=function(n){return n.nodeType===1?(n.tagName+'.'+String(n.className).slice(0,50)+' id='+(n.id||'')+' :: '+(n.textContent||'').trim().slice(0,50)):(n.nodeType===8?'<!--'+n.data+'-->':'#text '+(n.textContent||'').trim().slice(0,30))};new MutationObserver(function(ms){ms.forEach(function(m){m.removedNodes.forEach(function(n){L.push({t:performance.now()|0,op:'rm',p:m.target.nodeName+(m.target.id?'#'+m.target.id:''),n:d(n)})});m.addedNodes.forEach(function(n){if(n.nodeType===1)L.push({t:performance.now()|0,op:'add',p:m.target.nodeName+(m.target.id?'#'+m.target.id:''),n:d(n)})})})}).observe(document.documentElement,{childList:true,subtree:true});var E=null;window.addEventListener('error',function(e){if(String(e.message).indexOf('418')>-1&&!E)E=performance.now()|0});setTimeout(function(){window.__hydrationReport={errorAt:E,around:E?L.filter(function(x){return x.t>=E-5&&x.t<=E+400}).slice(0,40):L.filter(function(x){return x.op==='rm'}).slice(0,20)}},8000)}`,
-          }}
-        />
       </head>
       <body className="pb-tabbar flex min-h-full flex-col font-sans">
         <a

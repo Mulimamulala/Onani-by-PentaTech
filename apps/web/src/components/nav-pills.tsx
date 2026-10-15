@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
+import { useHydrated } from '@/lib/use-hydrated'
 
 export const NAV = [
   { href: '/', label: 'Home', match: (p: string) => p === '/' },
@@ -17,11 +18,13 @@ const pill = 'relative rounded-full px-4 py-2 text-[13px] font-semibold transiti
 export function NavPills() {
   const pathname = usePathname()
   const query = useSearchParams()
+  // Highlight only after hydration: the prerendered shell may not match this URL.
+  const hydrated = useHydrated()
 
   return (
     <nav aria-label="Main" className="flex items-center gap-0.5 rounded-full bg-surface/60 p-1 ring-1 ring-hairline-soft backdrop-blur-md">
       {NAV.map((item) => {
-        const active = item.match(pathname, query)
+        const active = hydrated && item.match(pathname, query)
         return (
           <Link
             key={item.href}

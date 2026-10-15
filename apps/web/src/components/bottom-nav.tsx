@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useHydrated } from '@/lib/use-hydrated'
 import { GridIcon, HomeIcon, TicketIcon, UserIcon } from './icons'
 
 const TABS = [
@@ -13,8 +14,12 @@ const TABS = [
 
 /** Mobile tab bar, the primary navigation under 768px. */
 export function BottomNav() {
-  const pathname = usePathname()
-  if (pathname.startsWith('/watch')) return null
+  const current = usePathname()
+  // The cached page shell can be prerendered for a different URL than the one
+  // being viewed, so the server never marks a tab active; the browser does it
+  // right after hydration. This keeps server and client markup identical.
+  const pathname = useHydrated() ? current : null
+  if (pathname?.startsWith('/watch')) return null
 
   return (
     <nav
@@ -24,7 +29,7 @@ export function BottomNav() {
     >
       <ul className="grid h-16 grid-cols-4">
         {TABS.map(({ href, label, Icon, match }) => {
-          const active = match(pathname)
+          const active = pathname != null && match(pathname)
           return (
             <li key={href}>
               <Link
