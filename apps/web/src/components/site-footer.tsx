@@ -16,6 +16,9 @@ export function SiteFooter() {
           <Link href="/browse?type=series" className="hover:text-ink">Series</Link>
           <Link href="/account" className="hover:text-ink">Account</Link>
           <Link href="/browse?free=1" className="hover:text-ink">Watch free</Link>
+          <Link href="/terms" className="hover:text-ink">Terms</Link>
+          <Link href="/privacy" className="hover:text-ink">Privacy</Link>
+          <Link href="/cookies" className="hover:text-ink">Cookies</Link>
         </nav>
         <div className="flex flex-col gap-4 md:items-end">
           <ThemeToggle />

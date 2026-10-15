@@ -1,7 +1,9 @@
 'use client'
 
 import { useActionState } from 'react'
+import Link from 'next/link'
 import { CheckIcon } from '@/components/icons'
+import { MIN_AGE } from '@/lib/legal'
 import { sendMagicLink, type LoginState } from './actions'
 
 export function LoginForm({ next, error }: { next: string; error?: string }) {
@@ -36,6 +38,18 @@ export function LoginForm({ next, error }: { next: string; error?: string }) {
         placeholder="you@example.com"
         className="rounded-[14px] border border-hairline bg-bg px-4 py-3.5 text-base outline-none transition placeholder:text-ink-muted focus:border-ink"
       />
+      <label className="mt-1 flex gap-3 text-sm text-ink-2">
+        <input type="checkbox" name="agree" required className="mt-0.5 size-4 shrink-0 accent-[var(--ink)]" />
+        <span>
+          I agree to the{' '}
+          <Link href="/terms" target="_blank" className="font-semibold text-ink underline underline-offset-2">Terms</Link> and{' '}
+          <Link href="/privacy" target="_blank" className="font-semibold text-ink underline underline-offset-2">Privacy Policy</Link>.
+        </span>
+      </label>
+      <label className="flex gap-3 text-sm text-ink-2">
+        <input type="checkbox" name="age" required className="mt-0.5 size-4 shrink-0 accent-[var(--ink)]" />
+        <span>I am {MIN_AGE} or older, or have a parent&apos;s permission.</span>
+      </label>
       <button
         disabled={pending}
         className="mt-1 rounded-full bg-ink px-4 py-3.5 font-bold text-bg transition hover:opacity-85 disabled:opacity-60"

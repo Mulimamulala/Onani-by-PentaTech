@@ -183,6 +183,26 @@ export type Database = {
           },
         ]
       }
+      consents: {
+        Row: {
+          id: string
+          user_id: string
+          kind: Database['public']['Enums']['consent_kind']
+          version: string
+          granted: boolean
+          created_at: Timestamp
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          kind: Database['public']['Enums']['consent_kind']
+          version: string
+          granted: boolean
+          created_at?: Timestamp
+        }
+        Update: Partial<Database['public']['Tables']['consents']['Insert']>
+        Relationships: []
+      }
     }
     Views: { [_ in never]: never }
     Functions: { [_ in never]: never }
@@ -190,6 +210,7 @@ export type Database = {
       title_kind: 'movie' | 'series'
       video_status: 'waiting_upload' | 'processing' | 'ready' | 'errored'
       subscription_status: 'pending' | 'active' | 'cancelled' | 'expired'
+      consent_kind: 'terms' | 'privacy' | 'age' | 'cookies_analytics'
     }
     CompositeTypes: { [_ in never]: never }
   }

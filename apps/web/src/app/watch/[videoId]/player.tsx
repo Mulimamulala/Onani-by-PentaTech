@@ -2,6 +2,7 @@
 
 import MuxPlayer from '@mux/mux-player-react'
 import { useEffect, useRef, useState } from 'react'
+import { useCookieConsent } from '@/lib/cookie-consent'
 import type { PlaybackTokens } from '@/lib/mux'
 import { saveProgress } from './actions'
 
@@ -27,6 +28,8 @@ export function Player(props: {
   watermark: string
 }) {
   const lastSaved = useRef(props.startTime)
+  // Playback-quality analytics (Mux Data) only with the viewer's consent.
+  const analytics = useCookieConsent() === 'all'
   const [spot, setSpot] = useState(0)
   const [shielded, setShielded] = useState(false)
 
@@ -71,6 +74,8 @@ export function Player(props: {
         accentColor="#ffffff"
         primaryColor="#ffffff"
         fullscreenElement={STAGE_ID}
+        disableTracking={!analytics}
+        disableCookies={!analytics}
         autoPlay
         metadata={{
           video_id: props.videoId,

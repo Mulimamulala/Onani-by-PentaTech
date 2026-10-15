@@ -1,6 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { LEGAL_VERSION } from '@/lib/legal'
 import { createClient } from '@/lib/supabase/server'
 
 export type LoginState = { status: 'idle' | 'sent' | 'error'; message?: string }
@@ -18,13 +19,19 @@ export async function sendMagicLink(_prev: LoginState, formData: FormData): Prom
     return { status: 'error', message: 'Enter a valid email address.' }
   }
 
+  if (formData.get('agree') !== 'on' || formData.get('age') !== 'on') {
+    return { status: 'error', message: 'Please accept the Terms and confirm your age to continue.' }
+  }
+
   const next = safeNext(formData.get('next'))
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+  // Acceptance is recorded when the link is opened and the account exists.
+  const accept = `&accept=${encodeURIComponent(LEGAL_VERSION)}`
 
   const supabase = await createClient()
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${siteUrl}/auth/callback?next=${encodeURIComponent(next)}` },
+    options: { emailRedirectTo: `${siteUrl}/auth/callback?next=${encodeURIComponent(next)}${accept}` },
   })
 
   if (error) return { status: 'error', message: error.message }

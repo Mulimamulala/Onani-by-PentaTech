@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import { isSubscriptionActive } from '@onani/core'
 import { requireUser } from '@/lib/auth'
+import { CookieChoice } from '@/components/cookie-choice'
+import { LEGAL_VERSION } from '@/lib/legal'
 import { createClient } from '@/lib/supabase/server'
 import { signOut } from '../login/actions'
 
@@ -62,6 +64,16 @@ async function Details() {
             </Link>
           </>
         )}
+      </section>
+
+      <section className="rounded-[24px] bg-surface p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-muted">Privacy</p>
+        <p className="mt-1 text-sm text-ink-2">
+          You accepted the <Link href="/terms" className="font-semibold text-ink underline">Terms</Link> and{' '}
+          <Link href="/privacy" className="font-semibold text-ink underline">Privacy Policy</Link> (version {LEGAL_VERSION}).
+        </p>
+        <p className="mb-3 mt-5 text-sm font-semibold">Cookies</p>
+        <CookieChoice />
       </section>
 
       <div className="flex flex-wrap gap-3 pt-2">
