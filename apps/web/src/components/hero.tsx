@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { OnaniMark } from './brand'
 import { HERO_SHELL, primaryButton, secondaryButton } from './hero-styles'
 
 export { HERO_SHELL, primaryButton, secondaryButton }
@@ -39,7 +38,6 @@ function PosterWall() {
             key={i}
             className={`relative aspect-[2/3] overflow-hidden rounded-[14px] ring-1 ring-white/5 ${i % 3 === 0 ? 'bg-surface-2' : 'bg-surface'}`}
           >
-            {i === 9 && <OnaniMark className="absolute left-3 top-3 size-5" />}
             <div className="absolute inset-x-3 bottom-3 space-y-1.5">
               <div className="h-2 w-3/4 rounded-full bg-white/10" />
               <div className="h-2 w-1/2 rounded-full bg-white/5" />

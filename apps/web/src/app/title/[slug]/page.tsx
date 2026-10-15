@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { episodeLabel, formatDuration } from '@onani/core'
-import { OnaniMark, PentagonField } from '@/components/brand'
+import { PentagonField, Wordmark } from '@/components/brand'
 import { HERO_SHELL, primaryButton } from '@/components/hero'
 import { PlayIcon } from '@/components/icons'
 import { Rail } from '@/components/poster'
@@ -138,7 +138,7 @@ async function TitleDetails({ params }: { params: PageProps<'/title/[slug]'>['pa
                             className="object-cover transition duration-500 ease-out-soft md:group-hover:scale-[1.04]"
                           />
                         ) : (
-                          <OnaniMark className="absolute left-1/2 top-1/2 size-8 -translate-x-1/2 -translate-y-1/2 opacity-40" />
+                          <Wordmark className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl text-white/30" />
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                         <span className="absolute left-1/2 top-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-white ring-1 ring-white/40 backdrop-blur transition group-hover:bg-white group-hover:text-black">

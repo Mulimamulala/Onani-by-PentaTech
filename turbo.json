@@ -2,11 +2,32 @@
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ],
+      "env": [
+        "NEXT_PUBLIC_*",
+        "SUPABASE_SECRET_KEY",
+        "MUX_TOKEN_ID",
+        "MUX_TOKEN_SECRET",
+        "MUX_SIGNING_KEY",
+        "MUX_PRIVATE_KEY",
+        "MUX_WEBHOOK_SECRET"
+      ]
     },
-    "dev": { "cache": false, "persistent": true },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
     "lint": {},
-    "typecheck": { "dependsOn": ["^typecheck"] }
+    "typecheck": {
+      "dependsOn": [
+        "^typecheck"
+      ]
+    }
   }
 }

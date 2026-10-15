@@ -1,26 +1,14 @@
 import Link from 'next/link'
 
-/** The Onani mark: the PentaTech pentagon carrying a play triangle. */
-export function OnaniMark({ className = 'size-7' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" className={className}>
-      <polygon
-        points="16,3 28.4,12 23.7,26.6 8.3,26.6 3.6,12"
-        fill="var(--gold)"
-        stroke="var(--gold)"
-        strokeWidth="3"
-        strokeLinejoin="round"
-      />
-      <path d="M13.2 11.2v9.6l8-4.8-8-4.8Z" fill="var(--gold-ink)" />
-    </svg>
-  )
+/** The Onani wordmark: the name is the brand, no symbol. */
+export function Wordmark({ className = 'text-[22px]' }: { className?: string }) {
+  return <span className={`font-bold leading-none tracking-[-0.06em] ${className}`}>onani</span>
 }
 
 export function OnaniLogo({ className = '' }: { className?: string }) {
   return (
-    <Link href="/" aria-label="Onani home" className={`inline-flex items-center gap-2 ${className}`}>
-      <OnaniMark />
-      <span className="text-[22px] font-bold leading-none tracking-[-0.06em]">onani</span>
+    <Link href="/" aria-label="Onani home" className={`inline-flex items-center ${className}`}>
+      <Wordmark />
     </Link>
   )
 }

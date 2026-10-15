@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Title } from '@onani/db'
 import { isMuxImage } from '@/lib/images'
-import { OnaniMark, PentagonField } from './brand'
+import { PentagonField } from './brand'
 import { ChevronRightIcon, PlayIcon } from './icons'
 import { RailScroller } from './rail-scroller'
 
@@ -35,9 +35,8 @@ function FrameArt({ title, src, sizes }: { title: PosterTitle; src: string; size
 /** Nothing uploaded yet: a designed stand-in that still reads as a poster. */
 function PlaceholderArt({ title }: { title: PosterTitle }) {
   return (
-    <div className="theme-dark relative flex h-full flex-col justify-between overflow-hidden bg-surface p-3">
+    <div className="theme-dark relative flex h-full flex-col justify-end overflow-hidden bg-surface p-3">
       <PentagonField className="absolute -right-1/3 -top-1/4 w-[140%]" />
-      <OnaniMark className="relative size-5 self-end" />
       <Label title={title} />
     </div>
   )

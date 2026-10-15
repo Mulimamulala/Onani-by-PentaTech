@@ -2,7 +2,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { formatPrice, progressFraction } from '@onani/core'
-import { OnaniMark } from '@/components/brand'
 import { WelcomeHero } from '@/components/hero'
 import { HeroCarousel } from '@/components/hero-carousel'
 import { CheckIcon, PlayIcon, TicketIcon } from '@/components/icons'
@@ -145,7 +144,6 @@ function EmptyCatalog() {
   return (
     <section className="px-4 md:px-10">
       <div className="mx-auto max-w-[1600px] rounded-[24px] bg-surface p-8 text-center md:p-14">
-        <OnaniMark className="mx-auto size-10" />
         <h2 className="mt-4 text-2xl font-bold tracking-[-0.03em]">New titles are on the way.</h2>
         <p className="mx-auto mt-2 max-w-md text-ink-muted">
           We&apos;re adding films and series now. Sign in so you&apos;re ready to press play.

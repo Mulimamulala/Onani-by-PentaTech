@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
-import { OnaniMark } from '@/components/brand'
 import { PosterCard } from '@/components/poster'
 import { getAllTitles, groupByGenre } from '@/lib/catalog'
 
@@ -105,7 +104,6 @@ async function Results({ searchParams }: { searchParams: PageProps<'/browse'>['s
         </ul>
       ) : (
         <div className="mt-6 rounded-[24px] bg-surface p-10 text-center">
-          <OnaniMark className="mx-auto size-8" />
           <p className="mt-3 font-bold">Nothing here yet.</p>
           <p className="mt-1 text-sm text-ink-muted">Try another filter, or check back soon.</p>
         </div>
